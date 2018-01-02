@@ -1,5 +1,12 @@
 # Changelog
 
-## 0.0.1
+## 2.5.1
 
-- Initial version, created by Stagehand
++ Padding
++ Flex tables
++ Column width customization
++ Column width estimation
+
+## 1.0.0
+
++ Single line tables
