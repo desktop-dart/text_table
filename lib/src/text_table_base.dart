@@ -8,7 +8,7 @@ class Table {
 
   final List<Align> aligns;
 
-  final String ellipses;
+  final String ellipsis;
 
   Border _border;
 
@@ -26,7 +26,7 @@ class Table {
       Align align,
       List<Align> aligns = const [],
       Border border: Border.def,
-      this.ellipses: '...'})
+      this.ellipsis: '...'})
       : head = new List<String>.unmodifiable(
             head.map((h) => h.toString()).toList(growable: false)),
         columnWidths = _fill(head.length, columnWidths, flex(1)),
@@ -49,7 +49,7 @@ class Table {
   int get numColumns => head.length;
 
   String toString() {
-    // TODO compute fixed widths
+    // TODO compute flex widths
 
     final List<int> widths =
         columnWidths.map((size) => size.size).toList(growable: false);
@@ -57,25 +57,48 @@ class Table {
 
     final sb = new StringBuffer();
 
-    sb.writeln(TableDrawer.line(widths, totalWidth, border.topLine));
+    if (head.any((s) => s.isNotEmpty)) {
+      {
+        final LineStyle sepStyle = border.topLine;
+        if (sepStyle.left.isNotEmpty ||
+            sepStyle.horizontal.isNotEmpty ||
+            sepStyle.intersection.isNotEmpty ||
+            sepStyle.right.isNotEmpty)
+          sb.writeln(TableDrawer.line(widths, totalWidth, border.topLine));
+      }
 
-    sb.writeln(TableDrawer.singleLineRow(
-        head, widths, aligns, ellipses, border.contentLine));
+      sb.writeln(TableDrawer.singleLineRow(
+          head, widths, aligns, ellipsis, border.contentLine));
 
-    if(_rows.length > 1) {
-      sb.writeln(TableDrawer.line(widths, totalWidth, border.headLine));
+      if (_rows.length > 1) {
+        sb.writeln(TableDrawer.line(widths, totalWidth, border.headLine));
+      }
     }
 
     for (List<String> cells in _rows) {
       sb.writeln(TableDrawer.singleLineRow(
-          cells, widths, aligns, ellipses, border.contentLine));
+          cells, widths, aligns, ellipsis, border.contentLine));
 
-      if(cells != _rows.last) {
-        sb.writeln(TableDrawer.line(widths, totalWidth, border.separatorLine));
+      if (cells != _rows.last) {
+        final LineStyle sepStyle = border.separatorLine;
+        if (sepStyle.left.isNotEmpty ||
+            sepStyle.horizontal.isNotEmpty ||
+            sepStyle.intersection.isNotEmpty ||
+            sepStyle.right.isNotEmpty) {
+          sb.writeln(
+              TableDrawer.line(widths, totalWidth, border.separatorLine));
+        }
       }
     }
 
-    sb.writeln(TableDrawer.line(widths, totalWidth, border.bottomLine));
+    {
+      final LineStyle sepStyle = border.bottomLine;
+      if (sepStyle.left.isNotEmpty ||
+          sepStyle.horizontal.isNotEmpty ||
+          sepStyle.intersection.isNotEmpty ||
+          sepStyle.right.isNotEmpty)
+        sb.writeln(TableDrawer.line(widths, totalWidth, border.bottomLine));
+    }
 
     return sb.toString();
   }
@@ -122,14 +145,14 @@ class TableDrawer {
   }
 
   static String singleLineCell(
-      int width, String value, Align align, String ellipses) {
+      int width, String value, Align align, String ellipsis) {
     if (value.length == width) {
       return value;
     } else if (value.length > width) {
-      if (width >= ellipses.length) {
-        return ellipses.substring(0, width);
+      if (width >= ellipsis.length) {
+        return ellipsis.substring(0, width);
       } else {
-        return value.substring(0, width - ellipses.length) + ellipses;
+        return value.substring(0, width - ellipsis.length) + ellipsis;
       }
     }
 
@@ -153,11 +176,11 @@ class TableDrawer {
   }
 
   static String singleLineRow(List<String> cells, List<int> widths,
-      List<Align> aligns, String ellipses, LineStyle style) {
+      List<Align> aligns, String ellipsis, LineStyle style) {
     final renderedCells = <String>[];
     for (int i = 0; i < cells.length; i++) {
       renderedCells.add(
-          TableDrawer.singleLineCell(widths[i], cells[i], aligns[i], ellipses));
+          TableDrawer.singleLineCell(widths[i], cells[i], aligns[i], ellipsis));
     }
 
     return TableDrawer.row(renderedCells, style);
@@ -169,9 +192,10 @@ Table table(List<dynamic> head,
         Align align,
         List<Align> aligns = const [],
         Border border: Border.def,
-        String ellipses: '...'}) =>
+        String ellipsis: '...'}) =>
     new Table(head,
         columnWidths: columnWidths,
         align: align,
         aligns: aligns,
-        border: border);
+        border: border,
+        ellipsis: ellipsis);

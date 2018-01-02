@@ -1,22 +1,151 @@
 # text_table
 
-A library for Dart developers.
+Renders style-able flex ascii tables.
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+## Features
+
++ [X] Customizable table borders
++ [X] Column width customization
++ [ ] Flex column widths
++ [X] Cell text alignment
++ [ ] Cell padding
++ [X] Text truncation and ellipsis
 
 ## Usage
 
-A simple usage example:
+### Simple example
 
-    import 'package:text_table/text_table.dart';
+```dart
+main() {
+    final Table tab = table(['Player', 'Team', 'Goals'],
+        columnWidths: [fixed(25), fixed(25), fixed(10)])
+      ..row(['Messi', 'Barcelona FC', 80])
+      ..row(['Christiano Ronaldo', 'Real Madrid', 30])
+      ..row(['Luiz Suarez', 'Barcelona FC', 50]);
+    print(tab);
+}
+```
 
-    main() {
-      var awesome = new Awesome();
-    }
+```
+┌─────────────────────────┬─────────────────────────┬──────────┐
+│Player                   │Team                     │Goals     │
+┝━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━┥
+│Messi                    │Barcelona FC             │80        │
+├─────────────────────────┼─────────────────────────┼──────────┤
+│Christiano Ronaldo       │Real Madrid              │30        │
+├─────────────────────────┼─────────────────────────┼──────────┤
+│Luiz Suarez              │Barcelona FC             │50        │
+└─────────────────────────┴─────────────────────────┴──────────┘
+```
 
-## Features and bugs
+### Text alignment
 
-Please file feature requests and bugs at the [issue tracker][tracker].
+```dart
+main() {
+    final Table tab = table(['Player', 'Team', 'Goals'],
+        columnWidths: [fixed(25), fixed(25), fixed(10)], align: Align.center)
+      ..row(['Messi', 'Barcelona FC', 80])..row(
+          ['Christiano Ronaldo', 'Real Madrid', 30])..row(
+          ['Luiz Suarez', 'Barcelona FC', 50]);
+    print(tab);
+}
+```
 
-[tracker]: http://example.com/issues/replaceme
+```
+┌─────────────────────────┬─────────────────────────┬──────────┐
+│         Player          │          Team           │  Goals   │
+┝━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━┥
+│          Messi          │      Barcelona FC       │    80    │
+├─────────────────────────┼─────────────────────────┼──────────┤
+│   Christiano Ronaldo    │       Real Madrid       │    30    │
+├─────────────────────────┼─────────────────────────┼──────────┤
+│       Luiz Suarez       │      Barcelona FC       │    50    │
+└─────────────────────────┴─────────────────────────┴──────────┘
+```
+
+#### Column specific text alignment
+
+```dart
+main() {
+    final Table tab = table(['Player', 'Team', 'Goals'],
+        columnWidths: [fixed(25), fixed(25), fixed(10)],
+        aligns: [Align.left, Align.center, Align.right])
+      ..row(['Messi', 'Barcelona FC', 80])
+      ..row(['Christiano Ronaldo', 'Real Madrid', 30])
+      ..row(['Luiz Suarez', 'Barcelona FC', 50]);
+    print(tab);
+}
+```
+
+```
+┌─────────────────────────┬─────────────────────────┬──────────┐
+│Player                   │          Team           │     Goals│
+┝━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━┥
+│Messi                    │      Barcelona FC       │        80│
+├─────────────────────────┼─────────────────────────┼──────────┤
+│Christiano Ronaldo       │       Real Madrid       │        30│
+├─────────────────────────┼─────────────────────────┼──────────┤
+│Luiz Suarez              │      Barcelona FC       │        50│
+└─────────────────────────┴─────────────────────────┴──────────┘
+```
+
+### Border styles
+
+```dart
+main() {
+    final Table tab = table(
+      ['Player', 'Team', 'Goals'],
+      columnWidths: [fixed(25), fixed(25), fixed(10)],
+      border: Border.doubleLines,
+    )
+      ..row(['Messi', 'Barcelona FC', 80])
+      ..row(['Christiano Ronaldo', 'Real Madrid', 30])
+      ..row(['Luiz Suarez', 'Barcelona FC', 50]);
+    print(tab);
+}
+```
+
+```
+╔═════════════════════════╤═════════════════════════╤══════════╗
+║Player                   │Team                     │Goals     ║
+╠═════════════════════════╪═════════════════════════╪══════════╣
+║Messi                    │Barcelona FC             │80        ║
+╟─────────────────────────┼─────────────────────────┼──────────╢
+║Christiano Ronaldo       │Real Madrid              │30        ║
+╟─────────────────────────┼─────────────────────────┼──────────╢
+║Luiz Suarez              │Barcelona FC             │50        ║
+╚═════════════════════════╧═════════════════════════╧══════════╝
+```
+
+#### Supported style
+
+> TODO
+
+#### No borders
+
+```dart
+main() {
+    final Table tab = table(['Player', 'Team', 'Goals'],
+        columnWidths: [fixed(25), fixed(25), fixed(10)], border: Border.compact)
+      ..row(['Messi', 'Barcelona FC', 80])
+      ..row(['Christiano Ronaldo', 'Real Madrid', 30])
+      ..row(['Luiz Suarez', 'Barcelona FC', 50]);
+    print(tab);
+}
+```
+
+```
+Player                   Team                     Goals     
+----------------------------------------------------------------
+Messi                    Barcelona FC             80        
+Christiano Ronaldo       Real Madrid              30        
+Luiz Suarez              Barcelona FC             50         
+```
+
+### Padding
+
+> TODO
+
+### Flex columns
+
+> TODO
