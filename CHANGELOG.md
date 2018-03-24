@@ -1,8 +1,12 @@
 # Changelog
 
+## 2.5.3
+
++ Headless table
+
 ## 2.5.2
 
-+ Fixed for Dart2
++ Fixes for Dart2
 
 ## 2.5.1
 

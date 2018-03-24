@@ -1,6 +1,6 @@
 name: text_table
 description: Renders style-able flex ascii tables.
-version: 2.5.2
+version: 2.5.3
 homepage: https://github.com/desktop-dart/text_table
 author: Ravi Teja Gudapati <tejainece@gmail.com>
 

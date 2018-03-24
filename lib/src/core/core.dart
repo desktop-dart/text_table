@@ -45,7 +45,7 @@ class Table {
       Border border: Border.def,
       this.ellipsis: '...'})
       : head = new List<String>.unmodifiable(
-            head.map((h) => h.toString()).toList(growable: false)),
+            head.map((h) => h?.toString()).toList(growable: false)),
         colWidths = _fill(head.length, colWidths, globalColWidth),
         minColWidths = _fill(head.length, minColWidths, globalMinColWidth),
         maxColWidths = _fill(head.length, maxColWidths, globalMaxColWidth),
@@ -73,7 +73,7 @@ class Table {
     final ret = new List<int>(head.length);
 
     for (int i = 0; i < head.length; i++) {
-      int max = head[i].length;
+      int max = head[i] != null ? head[i].length : 0;
       for (int j = 0; j < _rows.length; j++) {
         if (_rows[j][i].length > max) max = _rows[j][i].length;
       }
@@ -105,7 +105,7 @@ class Table {
 
     final sb = new StringBuffer();
 
-    if (head.any((s) => s.isNotEmpty)) {
+    if (head.any((s) => s != null && s.isNotEmpty)) {
       {
         final LineStyle sepStyle = border.topLine;
         if (sepStyle.left.isNotEmpty ||
@@ -123,6 +123,8 @@ class Table {
         sb.writeln(
             TableDrawer.line(widths, totalWidth, border.headLine, padding));
       }
+    } else {
+      sb.writeln(TableDrawer.line(widths, totalWidth, border.topLine, padding));
     }
 
     for (List<String> cells in _rows) {
