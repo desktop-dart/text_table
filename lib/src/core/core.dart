@@ -119,7 +119,7 @@ class Table {
       sb.writeln(TableDrawer.singleLineRow(
           head, widths, aligns, ellipsis, border.contentLine, padding));
 
-      if (_rows.length > 1) {
+      if (_rows.length > 0) {
         sb.writeln(
             TableDrawer.line(widths, totalWidth, border.headLine, padding));
       }

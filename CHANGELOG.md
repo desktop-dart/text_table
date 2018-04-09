@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.5.4
+
++ Bug fix when there is only row 
+
 ## 2.5.3
 
 + Headless table
