@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.6.0
+
++ Ported to Dart 2.0.0
+
 ## 2.5.4
 
 + Bug fix when there is only row 
