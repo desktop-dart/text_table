@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.0
+
++ Null safety
+
 ## 2.6.0
 
 + Ported to Dart 2.0.0

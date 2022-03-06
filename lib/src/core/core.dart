@@ -14,9 +14,9 @@ class Table {
 
   final List<Size> colWidths;
 
-  final List<Fixed> minColWidths;
+  final List<Fixed?> minColWidths;
 
-  final List<Fixed> maxColWidths;
+  final List<Fixed?> maxColWidths;
 
   final List<Padding> padding;
 
@@ -28,14 +28,14 @@ class Table {
 
   Border border;
 
-  Table(List<String> head,
+  Table(List<String?> head,
       {this.width: 0,
       Size globalColWidth: const Flex(0),
       List<Size> colWidths = const [],
-      Fixed globalMinColWidth,
-      List<Fixed> minColWidths = const [],
-      Fixed globalMaxColWidth,
-      List<Fixed> maxColWidths = const [],
+      Fixed? globalMinColWidth,
+      List<Fixed?> minColWidths = const [],
+      Fixed? globalMaxColWidth,
+      List<Fixed?> maxColWidths = const [],
       Padding globalPadding: const Padding(),
       List<Padding> padding = const [],
       Align globalAlign: Align.left,
@@ -44,8 +44,8 @@ class Table {
       List<bool> multiline = const [],
       Border border: Border.def,
       this.ellipsis: '...'})
-      : head = new List<String>.unmodifiable(
-            head.map((h) => h?.toString()).toList(growable: false)),
+      : head = List<String>.unmodifiable(
+            head.map((h) => h?.toString() ?? '').toList(growable: false)),
         colWidths = _fill(head.length, colWidths, globalColWidth),
         minColWidths = _fill(head.length, minColWidths, globalMinColWidth),
         maxColWidths = _fill(head.length, maxColWidths, globalMaxColWidth),
@@ -54,7 +54,7 @@ class Table {
         multiline = _fill(head.length, multiline, globalMultiline),
         border = border {
     if (colWidths.length > head.length)
-      throw new ArgumentError.value(
+      throw ArgumentError.value(
           colWidths, 'width', 'More columns widths provided that columns!');
   }
 
@@ -62,25 +62,25 @@ class Table {
 
   void row(List<dynamic> cells) {
     if (cells.length != head.length)
-      throw new ArgumentError.value(
+      throw ArgumentError.value(
           cells, 'cells', 'More cells in the row than expected!');
-    _rows.add(new List<String>.unmodifiable(cells.map((c) => c.toString())));
+    _rows.add(List<String>.unmodifiable(cells.map((c) => c.toString())));
   }
 
   int get numColumns => head.length;
 
   List<int> get _largest {
-    final ret = new List<int>(head.length);
+    final ret = List<int?>.filled(head.length, null);
 
     for (int i = 0; i < head.length; i++) {
-      int max = head[i] != null ? head[i].length : 0;
+      int max = head[i].length;
       for (int j = 0; j < _rows.length; j++) {
         if (_rows[j][i].length > max) max = _rows[j][i].length;
       }
       ret[i] = max > 0 ? max : 1;
     }
 
-    return ret;
+    return ret.cast();
   }
 
   String toString() {
@@ -103,9 +103,9 @@ class Table {
 
     final List<int> widths = Fixed.toInt(estimated).toList(growable: false);
 
-    final sb = new StringBuffer();
+    final sb = StringBuffer();
 
-    if (head.any((s) => s != null && s.isNotEmpty)) {
+    if (head.any((s) => s.isNotEmpty)) {
       {
         final LineStyle sepStyle = border.topLine;
         if (sepStyle.left.isNotEmpty ||
@@ -157,23 +157,23 @@ class Table {
   }
 }
 
-List<T> _fill<T>(int length, List<T> present, T fill) {
-  final ret = new List<T>.filled(length, fill);
+List<T> _fill<T>(int length, List<T> present, T? fill) {
+  final ret = List<T?>.filled(length, fill);
   for (int i = 0; i < present.length; i++) {
     ret[i] = present[i];
   }
-  return ret;
+  return ret.cast<T>();
 }
 
 /// Convenience function to build [Table]
-Table table(List<String> head,
+Table table(List<String?> head,
         {int width: 0,
         Size globalColWidth: const Flex(0),
         List<Size> colWidths = const [],
-        Fixed globalMinColWidth,
-        List<Fixed> minColWidths = const [],
-        Fixed globalMaxColWidth,
-        List<Fixed> maxColWidths = const [],
+        Fixed? globalMinColWidth,
+        List<Fixed?> minColWidths = const [],
+        Fixed? globalMaxColWidth,
+        List<Fixed?> maxColWidths = const [],
         Padding globalPadding: const Padding(),
         List<Padding> padding = const [],
         Align globalAlign: Align.left,
@@ -182,7 +182,7 @@ Table table(List<String> head,
         List<bool> multiline = const [],
         Border border: Border.def,
         String ellipsis: '...'}) =>
-    new Table(head,
+    Table(head,
         width: width,
         globalColWidth: globalColWidth,
         colWidths: colWidths,
@@ -199,4 +199,4 @@ Table table(List<String> head,
         border: border,
         ellipsis: ellipsis);
 
-List<String> noHead(int numCols) => new List<String>.filled(numCols, '');
+List<String> noHead(int numCols) => List<String>.filled(numCols, '');

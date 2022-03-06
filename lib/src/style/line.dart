@@ -6,5 +6,9 @@ class LineStyle {
   final String intersection;
   final String right;
 
-  LineStyle({this.left, this.horizontal, this.intersection, this.right});
+  LineStyle(
+      {required this.left,
+      required this.horizontal,
+      required this.intersection,
+      required this.right});
 }

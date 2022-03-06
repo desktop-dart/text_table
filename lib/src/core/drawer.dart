@@ -3,7 +3,7 @@ part of text_table.core;
 class TableDrawer {
   static String line(List<int> colWidths, int totalWidth, LineStyle style,
       List<Padding> padding) {
-    final str = new List<String>.filled(totalWidth, style.horizontal);
+    final str = List<String>.filled(totalWidth, style.horizontal);
     str[0] = style.left;
     str[str.length - 1] = style.right;
 
@@ -50,7 +50,7 @@ class TableDrawer {
         return (' ' * (width - value.length)) + value;
         break;
       default:
-        throw new UnsupportedError('Unsupported alignment!');
+        throw UnsupportedError('Unsupported alignment!');
     }
   }
 
