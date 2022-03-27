@@ -1,11 +1,17 @@
 import 'package:text_table/text_table.dart';
 
 main() {
-  final Table tab = table(['Player', 'Team', 'Goals'])
-    ..row(['Messi', 'Barcelona FC', 80])
-    ..row(['Christiano Ronaldo', 'Real Madrid', 30])
-    ..row(['Luiz Suarez', 'Barcelona FC', 50]);
-  tab.maxColWidths[0] = fixed(10);
-  tab.minColWidths[2] = fixed(10);
-  print(tab);
+  // Left align
+  {
+    final tab = TableRenderer().render([
+      ['Messi', 'Barcelona FC', 80],
+      ['Christiano Ronaldo', 'Real Madrid', 30],
+      ['Luiz Suarez', 'Barcelona FC', 50]
+    ], columns: [
+      Column(name: 'Player', width: Fixed(10)),
+      Column(name: 'Team', width: Fixed(10)),
+      Column(name: 'Goals', width: Fixed(10))
+    ]);
+    print(tab);
+  }
 }

@@ -1,4 +1,5 @@
-part of text_table.core;
+import '../dimension/dimension.dart';
+import '../style/style.dart';
 
 class TableDrawer {
   static String line(List<int> colWidths, int totalWidth, LineStyle style,
@@ -19,48 +20,40 @@ class TableDrawer {
     return str.join();
   }
 
-  static String row(List<String> cells, LineStyle style) {
+  static String row(List cells, LineStyle style) {
     return style.left + cells.join(style.intersection) + style.right;
   }
 
-  static String singleLineCell(
-      int width, String value, Align align, String ellipsis) {
-    if (value.length == width) {
-      return value;
-    } else if (value.length > width) {
+  static String singleLineCell(int width, value, Align align, String ellipsis) {
+    final v = value?.toString() ?? '';
+    if (v.length == width) {
+      return v;
+    } else if (v.length > width) {
       if (ellipsis.length >= width) {
         return ellipsis.substring(0, width);
       } else {
-        return value.substring(0, width - ellipsis.length) + ellipsis;
+        return v.substring(0, width - ellipsis.length) + ellipsis;
       }
     }
 
     switch (align) {
       case Align.left:
-        return value + (' ' * (width - value.length));
-        break;
+        return v + (' ' * (width - v.length));
       case Align.center:
-        final int spaces = width - value.length;
+        final int spaces = width - v.length;
         return (' ' * (spaces ~/ 2)) +
-            value +
+            v +
             (' ' * (spaces ~/ 2)) +
             (spaces.isOdd ? ' ' : '');
-        break;
       case Align.right:
-        return (' ' * (width - value.length)) + value;
-        break;
+        return (' ' * (width - v.length)) + v;
       default:
         throw UnsupportedError('Unsupported alignment!');
     }
   }
 
-  static String singleLineRow(
-      List<String> cells,
-      List<int> widths,
-      List<Align> aligns,
-      String ellipsis,
-      LineStyle style,
-      List<Padding> pads) {
+  static String singleLineRow(List cells, List<int> widths, List<Align> aligns,
+      String ellipsis, LineStyle style, List<Padding> pads) {
     final renderedCells = <String>[];
     for (int i = 0; i < cells.length; i++) {
       renderedCells.add(pads[i].pad(TableDrawer.singleLineCell(
