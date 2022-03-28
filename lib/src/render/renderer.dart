@@ -116,8 +116,8 @@ class TableRenderer {
             sepStyle.horizontal.isNotEmpty ||
             sepStyle.intersection.isNotEmpty ||
             sepStyle.right.isNotEmpty)
-          sb.writeln(
-              TableDrawer.line(widths, totalWidth, border.topLine, paddings));
+          sb.writeln(TableDrawer.drawRowSeparator(
+              widths, totalWidth, border.topLine, paddings));
       }
 
       sb.writeln(TableDrawer.singleLineRow(
@@ -129,12 +129,12 @@ class TableRenderer {
           paddings));
 
       if (rows.length > 0) {
-        sb.writeln(
-            TableDrawer.line(widths, totalWidth, border.headLine, paddings));
+        sb.writeln(TableDrawer.drawRowSeparator(
+            widths, totalWidth, border.headLine, paddings));
       }
     } else {
-      sb.writeln(
-          TableDrawer.line(widths, totalWidth, border.topLine, paddings));
+      sb.writeln(TableDrawer.drawRowSeparator(
+          widths, totalWidth, border.topLine, paddings));
     }
 
     for (List cells in rows) {
@@ -147,7 +147,7 @@ class TableRenderer {
             sepStyle.horizontal.isNotEmpty ||
             sepStyle.intersection.isNotEmpty ||
             sepStyle.right.isNotEmpty) {
-          sb.writeln(TableDrawer.line(
+          sb.writeln(TableDrawer.drawRowSeparator(
               widths, totalWidth, border.separatorLine, paddings));
         }
       }
@@ -159,8 +159,8 @@ class TableRenderer {
           sepStyle.horizontal.isNotEmpty ||
           sepStyle.intersection.isNotEmpty ||
           sepStyle.right.isNotEmpty)
-        sb.writeln(
-            TableDrawer.line(widths, totalWidth, border.bottomLine, paddings));
+        sb.writeln(TableDrawer.drawRowSeparator(
+            widths, totalWidth, border.bottomLine, paddings));
     }
 
     return sb.toString();

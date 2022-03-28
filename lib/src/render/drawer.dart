@@ -1,9 +1,12 @@
+import 'dart:collection';
+import 'package:characters/characters.dart';
+
 import '../dimension/dimension.dart';
 import '../style/style.dart';
 
 class TableDrawer {
-  static String line(List<int> colWidths, int totalWidth, LineStyle style,
-      List<Padding> padding) {
+  static String drawRowSeparator(List<int> colWidths, int totalWidth,
+      LineStyle style, List<Padding> padding) {
     final str = List<String>.filled(totalWidth, style.horizontal);
     str[0] = style.left;
     str[str.length - 1] = style.right;
@@ -52,6 +55,17 @@ class TableDrawer {
     }
   }
 
+  static List<String> toMultiline(String data, int width, Align align) {
+    if(width == 0) {
+      return [];
+    }
+    final ret = _window(Characters(data), width);
+    if(ret.last.length != width) {
+      // TODO
+    }
+    // TODO
+  }
+
   static String singleLineRow(List cells, List<int> widths, List<Align> aligns,
       String ellipsis, LineStyle style, List<Padding> pads) {
     final renderedCells = <String>[];
@@ -62,4 +76,27 @@ class TableDrawer {
 
     return TableDrawer.row(renderedCells, style);
   }
+}
+
+List<String> _window(Iterable<String> input, int count, Align align) {
+  final ret = <String>[];
+  if(count == 0) {
+    return ret;
+  }
+
+  var cur = <String>[];
+
+  for(final item in input) {
+    cur.add(item);
+    if(cur.length == count) {
+      ret.add(cur.join());
+      cur = <String>[];
+    }
+  }
+
+  if(cur.isNotEmpty) {
+    ret.add(align.align(cur, count));
+  }
+
+  return ret;
 }

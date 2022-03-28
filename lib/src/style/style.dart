@@ -10,6 +10,21 @@ class Align {
 
   const Align._(this.id, this.text);
 
+  String align(Iterable<String> characters, int width) {
+    switch(this) {
+      case left:
+        return characters.join() + ' ' * (width - characters.length);
+        // TODO
+      case center:
+        // TODO
+      case right:
+        // TODO
+      default:
+        throw Exception('unknown alignment requested');
+    }
+    // TODO
+  }
+
   static const Align left = const Align._(0, 'Left');
 
   static const Align center = const Align._(1, 'Center');

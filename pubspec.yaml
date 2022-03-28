@@ -6,8 +6,8 @@ homepage: https://github.com/desktop-dart/text_table
 environment:
   sdk: '>=2.15.0 <3.0.0'
 
-#dependencies:
-#  path: ^1.4.1
+dependencies:
+  characters: ^1.2.0
 
 dev_dependencies:
   test: ^1.14.3
