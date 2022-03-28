@@ -1,71 +1,70 @@
 part of text_table.style;
 
 class Border {
-  final String? topLeft;
+  final String topLeft;
   final String topFlat;
-  final String? topIntersect;
-  final String? topRight;
+  final String topIntersect;
+  final String topRight;
 
-  final String? bottomLeft;
+  final String bottomLeft;
   final String bottomFlat;
-  final String? bottomIntersect;
-  final String? bottomRight;
+  final String bottomIntersect;
+  final String bottomRight;
 
-  final String? separatorLeft;
+  final String separatorLeft;
   final String separatorFlat;
-  final String? separatorIntersect;
-  final String? separatorRight;
+  final String separatorIntersect;
+  final String separatorRight;
 
   final String contentLeft;
   final String contentSpace;
   final String contentIntersect;
   final String contentRight;
 
-  final String? headLeft;
-  final String? headFlat;
-  final String? headIntersect;
-  final String? headRight;
+  final String headLeft;
+  final String headFlat;
+  final String headIntersect;
+  final String headRight;
 
   const Border(
-      {this.topLeft,
+      {required this.topLeft,
       required this.topFlat,
-      this.topIntersect,
-      this.topRight,
-      this.bottomLeft,
+      required this.topIntersect,
+      required this.topRight,
+      required this.bottomLeft,
       required this.bottomFlat,
-      this.bottomIntersect,
-      this.bottomRight,
-      this.separatorLeft,
+      required this.bottomIntersect,
+      required this.bottomRight,
+      required this.separatorLeft,
       required this.separatorFlat,
-      this.separatorIntersect,
-      this.separatorRight,
+      required this.separatorIntersect,
+      required this.separatorRight,
       required this.contentLeft,
       this.contentSpace: ' ',
       required this.contentIntersect,
       required this.contentRight,
-      this.headLeft,
-      this.headFlat,
-      this.headIntersect,
-      this.headRight});
+      required this.headLeft,
+      required this.headFlat,
+      required this.headIntersect,
+      required this.headRight});
 
   LineStyle get topLine => LineStyle(
-      left: topLeft ?? topFlat,
+      left: topLeft,
       horizontal: topFlat,
-      intersection: topIntersect ?? topFlat,
-      right: topRight ?? topFlat);
+      intersection: topIntersect,
+      right: topRight);
 
   LineStyle get headLine => LineStyle(
-      left: headLeft ?? headFlat ?? separatorLeft ?? separatorFlat,
-      horizontal: headFlat ?? separatorFlat,
-      intersection:
-          headIntersect ?? headFlat ?? separatorIntersect ?? separatorFlat,
-      right: headRight ?? headFlat ?? separatorRight ?? separatorFlat);
+      left: headLeft,
+      horizontal: headFlat,
+      intersection: headIntersect,
+      right: headRight);
 
   LineStyle get separatorLine => LineStyle(
-      left: separatorLeft ?? separatorFlat,
+      left: separatorLeft,
       horizontal: separatorFlat,
-      intersection: separatorIntersect ?? separatorFlat,
-      right: separatorRight ?? separatorFlat);
+      intersection: separatorIntersect,
+      right: separatorRight);
 
   LineStyle get contentLine => LineStyle(
       left: contentLeft,
@@ -74,10 +73,10 @@ class Border {
       right: contentRight);
 
   LineStyle get bottomLine => LineStyle(
-      left: bottomLeft ?? bottomFlat,
+      left: bottomLeft,
       horizontal: bottomFlat,
-      intersection: bottomIntersect ?? bottomFlat,
-      right: bottomRight ?? bottomFlat);
+      intersection: bottomIntersect,
+      right: bottomRight);
 
   Border copyWith(
           {String? topLeft,
@@ -144,7 +143,7 @@ class Border {
       headIntersect: '┿',
       headRight: '┥');
 
-  static const Border defRound = const Border(
+  static const Border round = const Border(
       topLeft: '╭',
       topFlat: '─',
       topIntersect: '┬',
@@ -158,7 +157,6 @@ class Border {
       separatorIntersect: '┼',
       separatorRight: '┤',
       contentLeft: '│',
-      contentSpace: ' ',
       contentIntersect: '│',
       contentRight: '│',
       headLeft: '┝',
@@ -180,9 +178,12 @@ class Border {
       separatorIntersect: '┼',
       separatorRight: '┤',
       contentLeft: '│',
-      contentSpace: ' ',
       contentIntersect: '│',
-      contentRight: '│');
+      contentRight: '│',
+      headLeft: '│',
+      headIntersect: '│',
+      headRight: '│',
+      headFlat: '─');
 
   static const Border simpleRound = const Border(
       topLeft: '╭',
@@ -198,9 +199,12 @@ class Border {
       separatorIntersect: '┼',
       separatorRight: '┤',
       contentLeft: '│',
-      contentSpace: ' ',
       contentIntersect: '│',
-      contentRight: '│');
+      contentRight: '│',
+      headLeft: '│',
+      headIntersect: '│',
+      headRight: '│',
+      headFlat: '─');
 
   static const Border singleLine = const Border(
       topLeft: '┌',
@@ -240,7 +244,31 @@ class Border {
       contentRight: '',
       separatorRight: '',
       contentIntersect: '',
-      headFlat: '-');
+      headFlat: '-',
+      headLeft: '',
+      headRight: '',
+      headIntersect: '-');
+
+  static const Border compact1 = const Border(
+      topFlat: '',
+      topIntersect: '',
+      topLeft: '',
+      topRight: '',
+      bottomFlat: '',
+      bottomIntersect: '',
+      bottomLeft: '',
+      bottomRight: '',
+      contentLeft: '',
+      separatorLeft: '',
+      separatorFlat: '',
+      separatorIntersect: '',
+      contentRight: '',
+      separatorRight: '',
+      contentIntersect: '',
+      headFlat: '-',
+      headLeft: '',
+      headRight: '',
+      headIntersect: ' ');
 
   static const Border doubleLines = const Border(
       topFlat: '═',

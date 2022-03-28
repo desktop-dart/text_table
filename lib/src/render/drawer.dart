@@ -1,4 +1,6 @@
 import 'dart:collection';
+import 'dart:math';
+import 'package:collection/collection.dart';
 import 'package:characters/characters.dart';
 
 import '../dimension/dimension.dart';
@@ -23,11 +25,11 @@ class TableDrawer {
     return str.join();
   }
 
-  static String row(List cells, LineStyle style) {
+  static String drawDataLine(List cells, LineStyle style) {
     return style.left + cells.join(style.intersection) + style.right;
   }
 
-  static String singleLineCell(int width, value, Align align, String ellipsis) {
+  /*static String drawCell(int width, value, Align align, String ellipsis) {
     final v = value?.toString() ?? '';
     if (v.length == width) {
       return v;
@@ -55,46 +57,69 @@ class TableDrawer {
     }
   }
 
-  static List<String> toMultiline(String data, int width, Align align) {
-    if(width == 0) {
-      return [];
-    }
-    final ret = _window(Characters(data), width);
-    if(ret.last.length != width) {
-      // TODO
-    }
-    // TODO
-  }
-
   static String singleLineRow(List cells, List<int> widths, List<Align> aligns,
       String ellipsis, LineStyle style, List<Padding> pads) {
     final renderedCells = <String>[];
     for (int i = 0; i < cells.length; i++) {
-      renderedCells.add(pads[i].pad(TableDrawer.singleLineCell(
-          widths[i], cells[i], aligns[i], ellipsis)));
+      renderedCells.add(pads[i]
+          .pad(TableDrawer.drawCell(widths[i], cells[i], aligns[i], ellipsis)));
     }
 
-    return TableDrawer.row(renderedCells, style);
+    return TableDrawer.drawDataLine(renderedCells, style);
+  }*/
+
+  static List<String> drawRow(List cells, List<int> widths, List<Align> aligns,
+      String ellipsis, LineStyle style, List<Padding> pads) {
+    final ret = <String>[];
+    final raw = makeCells(cells, widths, aligns, pads);
+    for (int i = 0; i < raw.first.length; i++) {
+      ret.add(drawDataLine(raw.map((e) => e[i]).toList(), style));
+    }
+    return ret;
+  }
+
+  static List<String> toMultilineOneCell(String data, int width, Align align) {
+    if (width == 0) {
+      return [];
+    }
+    return _window(Characters(data), width, align);
+  }
+
+  static List<List<String>> makeCells(
+      List cells, List<int> widths, List<Align> aligns, List<Padding> padding) {
+    final lines = cells
+        .mapIndexed((i, e) =>
+            toMultilineOneCell(e?.toString() ?? '', widths[i], aligns[i]))
+        .toList();
+    final maxLines =
+        lines.fold(0, (int p, element) => max<int>(p, element.length));
+    for (final line in lines) {
+      line.addAll(Iterable.generate(
+          maxLines - line.length, (_) => ' ' * line.first.length));
+    }
+    lines.forEachIndexed((i, lines) =>
+        lines.forEachIndexed((j, line) => lines[j] = padding[i].pad(line)));
+    return lines;
   }
 }
 
 List<String> _window(Iterable<String> input, int count, Align align) {
   final ret = <String>[];
-  if(count == 0) {
+  if (count == 0) {
     return ret;
   }
 
   var cur = <String>[];
 
-  for(final item in input) {
+  for (final item in input) {
     cur.add(item);
-    if(cur.length == count) {
+    if (cur.length == count) {
       ret.add(cur.join());
       cur = <String>[];
     }
   }
 
-  if(cur.isNotEmpty) {
+  if (cur.isNotEmpty) {
     ret.add(align.align(cur, count));
   }
 

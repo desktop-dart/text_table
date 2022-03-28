@@ -11,18 +11,20 @@ class Align {
   const Align._(this.id, this.text);
 
   String align(Iterable<String> characters, int width) {
-    switch(this) {
+    int charLen = characters.length;
+    switch (this) {
       case left:
-        return characters.join() + ' ' * (width - characters.length);
-        // TODO
+        return characters.join() + ' ' * (width - charLen);
       case center:
-        // TODO
+        int spaces = (width - charLen) ~/ 2;
+        return ' ' * spaces +
+            characters.join() +
+            ' ' * (width - charLen - spaces);
       case right:
-        // TODO
+        return ' ' * (width - charLen) + characters.join();
       default:
         throw Exception('unknown alignment requested');
     }
-    // TODO
   }
 
   static const Align left = const Align._(0, 'Left');

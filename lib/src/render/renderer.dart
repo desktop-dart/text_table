@@ -120,13 +120,9 @@ class TableRenderer {
               widths, totalWidth, border.topLine, paddings));
       }
 
-      sb.writeln(TableDrawer.singleLineRow(
-          columns.map((e) => e.name ?? '').toList(),
-          widths,
-          aligns,
-          ellipsis,
-          border.contentLine,
-          paddings));
+      TableDrawer.drawRow(columns.map((e) => e.name ?? '').toList(), widths,
+              aligns, ellipsis, border.contentLine, paddings)
+          .forEach(sb.writeln);
 
       if (rows.length > 0) {
         sb.writeln(TableDrawer.drawRowSeparator(
@@ -138,8 +134,9 @@ class TableRenderer {
     }
 
     for (List cells in rows) {
-      sb.writeln(TableDrawer.singleLineRow(
-          cells, widths, aligns, ellipsis, border.contentLine, paddings));
+      TableDrawer.drawRow(
+              cells, widths, aligns, ellipsis, border.contentLine, paddings)
+          .forEach(sb.writeln);
 
       if (cells != rows.last) {
         final LineStyle sepStyle = border.separatorLine;

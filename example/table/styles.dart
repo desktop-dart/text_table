@@ -15,16 +15,23 @@ main() {
   }
 
   {
-    print('Default rounded:');
+    print('Rounded:');
     final tab =
-        TableRenderer(border: Border.defRound).render(rows, columns: columns);
+        TableRenderer(border: Border.round).render(rows, columns: columns);
     print(tab);
   }
 
   {
-    print('No borders:');
+    print('Compact:');
     final tab =
         TableRenderer(border: Border.compact).render(rows, columns: columns);
+    print(tab);
+  }
+
+  {
+    print('Compact1:');
+    final tab =
+    TableRenderer(border: Border.compact).render(rows, columns: columns);
     print(tab);
   }
 
