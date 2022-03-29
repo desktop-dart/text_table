@@ -13,7 +13,7 @@ Renders style-able flex ascii tables.
 
 ### TODO
 
-+ [ ] Multiline cells
++ [ ] Merged cells
 
 ## Usage
 
