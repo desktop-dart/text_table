@@ -13,7 +13,7 @@ void main() {
     test('NoRows', () {
       final renderer = TableRenderer();
       print(renderer.render([],
-          columns: [Column(name: 'First'), Column(name: 'Second')]));
+          columns: [ColSpec(name: 'First'), ColSpec(name: 'Second')]));
     });
   });
 }

@@ -1,6 +1,8 @@
+import 'dart:math';
+
 import '../dimension/dimension.dart';
 
-class ColumnSpec {
+class ColumnArgs {
   final Size? width;
 
   final Size? min;
@@ -13,7 +15,7 @@ class ColumnSpec {
 
   final bool multiline;
 
-  ColumnSpec(
+  ColumnArgs(
       {required this.width,
       required this.min,
       required this.max,
@@ -22,8 +24,11 @@ class ColumnSpec {
       required this.multiline});
 }
 
-List<Fixed> estimateColumnSizes(List<ColumnSpec> cols) {
+List<Fixed> estimateColumnSizes(List<ColumnArgs> cols) {
   final ret = List<Fixed?>.filled(cols.length, null);
+
+  // final totalDataLength = cols.fold<int>(0, (p, c) => p + c.dataLength);
+  final maxLen = min(80 ~/ cols.length, 20);
 
   for (int i = 0; i < cols.length; i++) {
     Size? size = cols[i].width;
@@ -32,7 +37,7 @@ List<Fixed> estimateColumnSizes(List<ColumnSpec> cols) {
     } else {
       var width = Fixed(cols[i].dataLength)
           .clamp(cols[i].min, cols[i].max)
-          .min(Fixed(20));
+          .min(Fixed(maxLen));
       ret[i] = width;
     }
   }
@@ -41,7 +46,11 @@ List<Fixed> estimateColumnSizes(List<ColumnSpec> cols) {
 }
 
 List<Fixed> estimateColumnSizeWithTotalWidth(
-    int totalWidth, List<ColumnSpec> cols) {
+    int totalWidth, List<ColumnArgs> cols) {
+  if(totalWidth.isNegative) {
+    throw Exception('Content cannot fit inside the table');
+  }
+
   final ret = List<Fixed?>.filled(cols.length, null);
   final ok = List<bool>.filled(cols.length, false);
 

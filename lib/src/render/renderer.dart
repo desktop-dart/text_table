@@ -6,9 +6,7 @@ import '../dimension/dimension.dart';
 import 'sizing.dart';
 import 'drawer.dart';
 
-// String renderTable
-
-class Column {
+class ColSpec {
   final String? name;
 
   final Size? width;
@@ -19,21 +17,24 @@ class Column {
 
   final Padding? padding;
 
+  final Align headAlign;
+
   final Align align;
 
   final bool multiline;
 
-  Column(
+  ColSpec(
       {this.name,
       this.width,
       this.minWidth,
       this.maxWidth,
       this.padding,
+      this.headAlign = Align.center,
       this.align = Align.left,
       this.multiline = true});
 
-  static List<Column> fromNames(Iterable<String> names) =>
-      names.map((e) => Column(name: e)).toList();
+  static List<ColSpec> fromNames(Iterable<String> names) =>
+      names.map((e) => ColSpec(name: e)).toList();
 }
 
 class TableRenderer {
@@ -58,25 +59,26 @@ class TableRenderer {
       {bool withHead = true,
       List? /* <String | Column> */ columns,
       int? width}) {
+    // Make column spec
     if (columns == null) {
       withHead = false;
       final firstRow = rows.firstOrNull;
       if (firstRow == null || firstRow.isEmpty) {
-        columns = <Column>[];
+        columns = <ColSpec>[];
       } else {
-        columns = List<Column>.filled(firstRow.length, Column());
+        columns = List<ColSpec>.filled(firstRow.length, ColSpec());
       }
     } else if (columns.every((e) => e is String)) {
-      columns = Column.fromNames(columns.cast<String>());
-    } else if (columns.every((e) => e is Column)) {
-      columns = columns.cast<Column>();
+      columns = ColSpec.fromNames(columns.cast<String>());
+    } else if (columns.every((e) => e is ColSpec)) {
+      columns = columns.cast<ColSpec>();
     }
-
-    if (columns is! List<Column>) {
+    if (columns is! List<ColSpec>) {
       throw ArgumentError('invalid argument', 'columns');
     }
 
     final paddings = columns.map((e) => e.padding ?? padding).toList();
+    final headAligns = columns.map((e) => e.headAlign).toList();
     final aligns = columns.map((e) => e.align).toList();
 
     final decorWidth =
@@ -85,7 +87,7 @@ class TableRenderer {
             border.contentRight.length +
             paddings.map((p) => p.total).fold<int>(0, (p, c) => p + c);
     final colSpecs = columns
-        .mapIndexed((i, e) => ColumnSpec(
+        .mapIndexed((i, e) => ColumnArgs(
             width: e.width,
             min: e.minWidth ?? minColWidth,
             max: e.maxWidth ?? maxColWidth,
@@ -123,7 +125,7 @@ class TableRenderer {
       }
 
       TableDrawer.drawRow(columns.map((e) => e.name ?? '').toList(), widths,
-              aligns, ellipsis, border.contentLine, paddings)
+              headAligns, ellipsis, border.contentLine, paddings)
           .forEach(sb.writeln);
 
       sb.writeln(TableDrawer.drawRowSeparator(

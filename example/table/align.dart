@@ -8,9 +8,9 @@ main() {
       ['Christiano Ronaldo', 'Real Madrid', 30],
       ['Luiz Suarez', 'Barcelona FC', 50]
     ], columns: [
-      Column(name: 'Player', width: Fixed(25)),
-      Column(name: 'Team', width: Fixed(25)),
-      Column(name: 'Goals', width: Fixed(10))
+      ColSpec(name: 'Player', width: Fixed(25)),
+      ColSpec(name: 'Team', width: Fixed(25)),
+      ColSpec(name: 'Goals', width: Fixed(10))
     ]);
     print(tab);
   }
@@ -22,9 +22,9 @@ main() {
       ['Christiano Ronaldo', 'Real Madrid', 30],
       ['Luiz Suarez', 'Barcelona FC', 50]
     ], columns: [
-      Column(name: 'Player', width: Fixed(25), align: Align.right),
-      Column(name: 'Team', width: Fixed(25), align: Align.right),
-      Column(name: 'Goals', width: Fixed(10), align: Align.right)
+      ColSpec(name: 'Player', width: Fixed(25), align: Align.right),
+      ColSpec(name: 'Team', width: Fixed(25), align: Align.right),
+      ColSpec(name: 'Goals', width: Fixed(10), align: Align.right)
     ]);
     print(tab);
   }
@@ -36,9 +36,9 @@ main() {
       ['Christiano Ronaldo', 'Real Madrid', 30],
       ['Luiz Suarez', 'Barcelona FC', 50]
     ], columns: [
-      Column(name: 'Player', width: Fixed(25), align: Align.center),
-      Column(name: 'Team', width: Fixed(25), align: Align.center),
-      Column(name: 'Goals', width: Fixed(10), align: Align.center)
+      ColSpec(name: 'Player', width: Fixed(25), align: Align.center),
+      ColSpec(name: 'Team', width: Fixed(25), align: Align.center),
+      ColSpec(name: 'Goals', width: Fixed(10), align: Align.center)
     ]);
     print(tab);
   }

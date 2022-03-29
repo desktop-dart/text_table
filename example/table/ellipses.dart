@@ -8,9 +8,9 @@ main() {
       ['Christiano Ronaldo', 'Real Madrid', 30],
       ['Luiz Suarez', 'Barcelona FC', 50]
     ], columns: [
-      Column(name: 'Player', width: Fixed(10)),
-      Column(name: 'Team', width: Fixed(10)),
-      Column(name: 'Goals', width: Fixed(10))
+      ColSpec(name: 'Player', width: Fixed(10)),
+      ColSpec(name: 'Team', width: Fixed(10)),
+      ColSpec(name: 'Goals', width: Fixed(10))
     ]);
     print(tab);
   }
