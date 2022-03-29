@@ -94,7 +94,9 @@ class Padding {
 
   const Padding({this.before: 0, this.after: 0});
 
-  const Padding.same(int padding): before = padding, after = padding;
+  const Padding.same(int padding)
+      : before = padding,
+        after = padding;
 
   String pad(String content) => (' ' * before) + content + (' ' * after);
 }

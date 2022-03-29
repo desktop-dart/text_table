@@ -31,7 +31,7 @@ main() {
   {
     print('Compact1:');
     final tab =
-    TableRenderer(border: Border.compact).render(rows, columns: columns);
+        TableRenderer(border: Border.compact).render(rows, columns: columns);
     print(tab);
   }
 

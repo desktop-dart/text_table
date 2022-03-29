@@ -55,8 +55,8 @@ class TableDrawer {
     final maxLines =
         lines.fold(0, (int p, element) => max<int>(p, element.length));
     for (final line in lines) {
-      line.addAll(Iterable.generate(maxLines - line.length,
-          (_) => style.horizontal * line.first.length));
+      line.addAll(Iterable.generate(
+          maxLines - line.length, (_) => style.horizontal * line.first.length));
     }
     lines.forEachIndexed((i, lines) =>
         lines.forEachIndexed((j, line) => lines[j] = padding[i].pad(line)));

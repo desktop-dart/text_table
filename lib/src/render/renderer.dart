@@ -79,10 +79,11 @@ class TableRenderer {
     final paddings = columns.map((e) => e.padding ?? padding).toList();
     final aligns = columns.map((e) => e.align).toList();
 
-    final decorWidth = ((columns.length - 1) * border.contentIntersect.length) +
-        border.contentLeft.length +
-        border.contentRight.length +
-        paddings.map((p) => p.total).reduce((p, c) => p + c);
+    final decorWidth =
+        max((columns.length - 1) * border.contentIntersect.length, 0) +
+            border.contentLeft.length +
+            border.contentRight.length +
+            paddings.map((p) => p.total).fold<int>(0, (p, c) => p + c);
     final colSpecs = columns
         .mapIndexed((i, e) => ColumnSpec(
             width: e.width,
@@ -109,6 +110,7 @@ class TableRenderer {
 
     final sb = StringBuffer();
 
+    // Render heading
     if (withHead) {
       {
         final LineStyle sepStyle = border.topLine;
@@ -124,16 +126,18 @@ class TableRenderer {
               aligns, ellipsis, border.contentLine, paddings)
           .forEach(sb.writeln);
 
-      if (rows.length > 0) {
-        sb.writeln(TableDrawer.drawRowSeparator(
-            widths, totalWidth, border.headLine, paddings));
-      }
+      sb.writeln(TableDrawer.drawRowSeparator(
+          widths, totalWidth, border.headLine, paddings));
     } else {
       sb.writeln(TableDrawer.drawRowSeparator(
           widths, totalWidth, border.topLine, paddings));
     }
 
+    // Render row and its separator
     for (List cells in rows) {
+      if (cells.length != columns.length) {
+        throw Exception('Invalid number of columns in a row');
+      }
       TableDrawer.drawRow(
               cells, widths, aligns, ellipsis, border.contentLine, paddings)
           .forEach(sb.writeln);
@@ -150,6 +154,7 @@ class TableRenderer {
       }
     }
 
+    // Render bottom separator
     {
       final LineStyle sepStyle = border.bottomLine;
       if (sepStyle.left.isNotEmpty ||
