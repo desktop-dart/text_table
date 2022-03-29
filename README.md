@@ -5,33 +5,43 @@ Renders style-able flex ascii tables.
 ## Features
 
 + Customizable table borders
-+ Column width customization
-+ Flex column widths
++ Multiline rows
++ Column size control
+    + Min and max Column widths
+    + Flex column widths
+    + Percentage based column widths
 + Cell text alignment
 + Cell padding
-+ Text truncation and ellipsis
 
 ### TODO
 
 + [ ] Merged cells
++ [ ] Text truncation and ellipsis
 
 ## Usage
 
 ### Simple example
 
 ```dart
+import 'package:text_table/text_table.dart';
+
 main() {
-  final Table tab = table(['Player', 'Team', 'Goals'])
-    ..row(['Messi', 'Barcelona FC', 80])
-    ..row(['Christiano Ronaldo', 'Real Madrid', 30])
-    ..row(['Luiz Suarez', 'Barcelona FC', 50]);
+  final tab = TableRenderer().render([
+    ['Messi', 'Barcelona FC', 80],
+    ['Christiano Ronaldo', 'Real Madrid', 30],
+    ['Luiz Suarez', 'Barcelona FC', 50]
+  ], columns: [
+    'Player',
+    'Team',
+    'Goals'
+  ]);
   print(tab);
 }
 ```
 
 ```
 ┌──────────────────┬────────────┬─────┐
-│Player            │Team        │Goals│
+│      Player      │    Team    │Goals│
 ┝━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━┿━━━━━┥
 │Messi             │Barcelona FC│80   │
 ├──────────────────┼────────────┼─────┤
@@ -44,39 +54,21 @@ main() {
 ### Text alignment
 
 ```dart
-final Table tab = table(['Player', 'Team', 'Goals'],
-    colWidths: [fixed(25), fixed(25), fixed(10)], globalAlign: Align.center)
-  ..row(['Messi', 'Barcelona FC', 80])
-  ..row(['Christiano Ronaldo', 'Real Madrid', 30])
-  ..row(['Luiz Suarez', 'Barcelona FC', 50]);
+final tab = TableRenderer().render([
+  ['Messi', 'Barcelona FC', 80],
+  ['Christiano Ronaldo', 'Real Madrid', 30],
+  ['Luiz Suarez', 'Barcelona FC', 50]
+], columns: [
+  ColSpec(name: 'Player', width: Fixed(25), align: Align.left),
+  ColSpec(name: 'Team', width: Fixed(25), align: Align.center),
+  ColSpec(name: 'Goals', width: Fixed(10), align: Align.right)
+]);
+print(tab);
 ```
 
 ```
 ┌─────────────────────────┬─────────────────────────┬──────────┐
 │         Player          │          Team           │  Goals   │
-┝━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━┥
-│          Messi          │      Barcelona FC       │    80    │
-├─────────────────────────┼─────────────────────────┼──────────┤
-│   Christiano Ronaldo    │       Real Madrid       │    30    │
-├─────────────────────────┼─────────────────────────┼──────────┤
-│       Luiz Suarez       │      Barcelona FC       │    50    │
-└─────────────────────────┴─────────────────────────┴──────────┘
-```
-
-#### Column specific text alignment
-
-```dart
-final Table tab = table(['Player', 'Team', 'Goals'],
-    colWidths: [fixed(25), fixed(25), fixed(10)],
-    aligns: [Align.left, Align.center, Align.right])
-  ..row(['Messi', 'Barcelona FC', 80])
-  ..row(['Christiano Ronaldo', 'Real Madrid', 30])
-  ..row(['Luiz Suarez', 'Barcelona FC', 50]);
-```
-
-```
-┌─────────────────────────┬─────────────────────────┬──────────┐
-│Player                   │          Team           │     Goals│
 ┝━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━┥
 │Messi                    │      Barcelona FC       │        80│
 ├─────────────────────────┼─────────────────────────┼──────────┤
@@ -89,46 +81,32 @@ final Table tab = table(['Player', 'Team', 'Goals'],
 ### Padding
 
 ```dart
-  final Table tab = table(['Player', 'Team', 'Goals'],
-      globalPadding: pad(before: 2, after: 2))
-    ..row(['Messi', 'Barcelona FC', 80])
-    ..row(['Christiano Ronaldo', 'Real Madrid', 30])
-    ..row(['Luiz Suarez', 'Barcelona FC', 50]);
+import 'package:text_table/text_table.dart';
+
+main() {
+  final tab = TableRenderer(padding: Padding.same(1)).render([
+    ['Messi', 'Barcelona FC', 80],
+    ['Christiano Ronaldo', 'Real Madrid', 30],
+    ['Luiz Suarez', 'Barcelona FC', 50]
+  ], columns: [
+    'Player',
+    'Team',
+    ColSpec(name: 'Goals', padding: Padding.same(2)),
+  ]);
+  print(tab);
+}
 ```
 
 ```
-┌──────────────────────┬────────────────┬─────────┐
-│  Player              │  Team          │  Goals  │
-┝━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━━┿━━━━━━━━━┥
-│  Messi               │  Barcelona FC  │  80     │
-├──────────────────────┼────────────────┼─────────┤
-│  Christiano Ronaldo  │  Real Madrid   │  30     │
-├──────────────────────┼────────────────┼─────────┤
-│  Luiz Suarez         │  Barcelona FC  │  50     │
-└──────────────────────┴────────────────┴─────────┘
-```
-
-### Elipses
-
-```dart
-  final Table tab = table(['Player', 'Team', 'Goals'])
-    ..row(['Messi', 'Barcelona FC', 80])
-    ..row(['Christiano Ronaldo', 'Real Madrid', 30])
-    ..row(['Luiz Suarez', 'Barcelona FC', 50]);
-  tab.maxColWidths[0] = fixed(10);
-  tab.minColWidths[2] = fixed(10);
-```
-
-```
-┌──────────┬────────────┬──────────┐
-│Player    │Team        │Goals     │
-┝━━━━━━━━━━┿━━━━━━━━━━━━┿━━━━━━━━━━┥
-│Messi     │Barcelona FC│80        │
-├──────────┼────────────┼──────────┤
-│Christi...│Real Madrid │30        │
-├──────────┼────────────┼──────────┤
-│Luiz Su...│Barcelona FC│50        │
-└──────────┴────────────┴──────────┘
+┌────────────────────┬──────────────┬─────────┐
+│       Player       │     Team     │  Goals  │
+┝━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━┿━━━━━━━━━┥
+│ Messi              │ Barcelona FC │  80     │
+├────────────────────┼──────────────┼─────────┤
+│ Christiano Ronaldo │ Real Madrid  │  30     │
+├────────────────────┼──────────────┼─────────┤
+│ Luiz Suarez        │ Barcelona FC │  50     │
+└────────────────────┴──────────────┴─────────┘
 ```
 
 ### No borders

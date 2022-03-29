@@ -30,7 +30,7 @@ class TableDrawer {
   }
 
   static List<String> drawRow(List cells, List<int> widths, List<Align> aligns,
-      String ellipsis, LineStyle style, List<Padding> pads) {
+      LineStyle style, List<Padding> pads) {
     final ret = <String>[];
     final raw = makeCells(cells, widths, aligns, pads, style);
     for (int i = 0; i < raw.first.length; i++) {

@@ -21,8 +21,6 @@ class ColSpec {
 
   final Align align;
 
-  final bool multiline;
-
   ColSpec(
       {this.name,
       this.width,
@@ -30,8 +28,7 @@ class ColSpec {
       this.maxWidth,
       this.padding,
       this.headAlign = Align.center,
-      this.align = Align.left,
-      this.multiline = true});
+      this.align = Align.left});
 
   static List<ColSpec> fromNames(Iterable<String> names) =>
       names.map((e) => ColSpec(name: e)).toList();
@@ -46,14 +43,11 @@ class TableRenderer {
 
   final Padding padding;
 
-  final String ellipsis;
-
   const TableRenderer(
       {this.border = Border.def,
       this.minColWidth,
       this.maxColWidth,
-      this.padding = const Padding(),
-      this.ellipsis: '...'});
+      this.padding = const Padding()});
 
   String render(Iterable<List> rows,
       {bool withHead = true,
@@ -68,10 +62,11 @@ class TableRenderer {
       } else {
         columns = List<ColSpec>.filled(firstRow.length, ColSpec());
       }
-    } else if (columns.every((e) => e is String)) {
-      columns = ColSpec.fromNames(columns.cast<String>());
-    } else if (columns.every((e) => e is ColSpec)) {
-      columns = columns.cast<ColSpec>();
+    } else {
+      columns = columns.map((e) {
+        if (e is String) return ColSpec(name: e);
+        return e as ColSpec;
+      }).toList();
     }
     if (columns is! List<ColSpec>) {
       throw ArgumentError('invalid argument', 'columns');
@@ -92,8 +87,7 @@ class TableRenderer {
             min: e.minWidth ?? minColWidth,
             max: e.maxWidth ?? maxColWidth,
             dataLength: _findLongest(e.name ?? '', rows, i),
-            pad: e.padding ?? padding,
-            multiline: e.multiline))
+            pad: e.padding ?? padding))
         .toList();
 
     List<Fixed> estimated;
@@ -125,7 +119,7 @@ class TableRenderer {
       }
 
       TableDrawer.drawRow(columns.map((e) => e.name ?? '').toList(), widths,
-              headAligns, ellipsis, border.contentLine, paddings)
+              headAligns, border.contentLine, paddings)
           .forEach(sb.writeln);
 
       sb.writeln(TableDrawer.drawRowSeparator(
@@ -140,8 +134,7 @@ class TableRenderer {
       if (cells.length != columns.length) {
         throw Exception('Invalid number of columns in a row');
       }
-      TableDrawer.drawRow(
-              cells, widths, aligns, ellipsis, border.contentLine, paddings)
+      TableDrawer.drawRow(cells, widths, aligns, border.contentLine, paddings)
           .forEach(sb.writeln);
 
       if (cells != rows.last) {

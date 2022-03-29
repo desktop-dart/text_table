@@ -13,15 +13,12 @@ class ColumnArgs {
 
   final int dataLength;
 
-  final bool multiline;
-
   ColumnArgs(
       {required this.width,
       required this.min,
       required this.max,
       required this.dataLength,
-      required this.pad,
-      required this.multiline});
+      required this.pad});
 }
 
 List<Fixed> estimateColumnSizes(List<ColumnArgs> cols) {

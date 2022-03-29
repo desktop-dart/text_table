@@ -43,31 +43,16 @@ main() {
     print(tab);
   }
 
-  /*{
-    final Table tab = table(['Player', 'Team', 'Goals'],
-        colWidths: [fixed(25), fixed(25), fixed(10)], globalAlign: Align.center)
-      ..row(['Messi', 'Barcelona FC', 80])
-      ..row(['Christiano Ronaldo', 'Real Madrid', 30])
-      ..row(['Luiz Suarez', 'Barcelona FC', 50]);
+  {
+    final tab = TableRenderer().render([
+      ['Messi', 'Barcelona FC', 80],
+      ['Christiano Ronaldo', 'Real Madrid', 30],
+      ['Luiz Suarez', 'Barcelona FC', 50]
+    ], columns: [
+      ColSpec(name: 'Player', width: Fixed(25), align: Align.left),
+      ColSpec(name: 'Team', width: Fixed(25), align: Align.center),
+      ColSpec(name: 'Goals', width: Fixed(10), align: Align.right)
+    ]);
     print(tab);
   }
-
-  {
-    final Table tab = table(['Player', 'Team', 'Goals'],
-        colWidths: [fixed(25), fixed(25), fixed(10)], globalAlign: Align.right)
-      ..row(['Messi', 'Barcelona FC', 80])
-      ..row(['Christiano Ronaldo', 'Real Madrid', 30])
-      ..row(['Luiz Suarez', 'Barcelona FC', 50]);
-    print(tab);
-  }
-
-  {
-    final Table tab = table(['Player', 'Team', 'Goals'],
-        colWidths: [fixed(25), fixed(25), fixed(10)],
-        aligns: [Align.left, Align.center, Align.right])
-      ..row(['Messi', 'Barcelona FC', 80])
-      ..row(['Christiano Ronaldo', 'Real Madrid', 30])
-      ..row(['Luiz Suarez', 'Barcelona FC', 50]);
-    print(tab);
-  }*/
 }
