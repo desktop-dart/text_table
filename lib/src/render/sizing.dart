@@ -47,7 +47,7 @@ List<Fixed> estimateColumnSizes(List<ColumnArgs> cols) {
 
 List<Fixed> estimateColumnSizeWithTotalWidth(
     int totalWidth, List<ColumnArgs> cols) {
-  if(totalWidth.isNegative) {
+  if (totalWidth.isNegative) {
     throw Exception('Content cannot fit inside the table');
   }
 
@@ -57,18 +57,18 @@ List<Fixed> estimateColumnSizeWithTotalWidth(
   int remWidth = totalWidth;
   int flexTotal = 0;
 
-  // Fixed sizes
+  // Fixed size columns and no size columns
   for (int i = 0; i < cols.length; i++) {
     Size? size = cols[i].width;
 
     if (size is Fixed) {
-      ret[i] = size;
+      ret[i] = size.min(Fixed(remWidth));
       remWidth -= size.size;
       ok[i] = true;
     } else if (size is Perc) {
       int width = (totalWidth * size.percentage).floor();
 
-      ret[i] = Fixed(width);
+      ret[i] = Fixed(width).min(Fixed(remWidth));
       remWidth -= width;
       ok[i] = true;
     } else if (size is Flex) {
@@ -77,7 +77,7 @@ List<Fixed> estimateColumnSizeWithTotalWidth(
       var width = Fixed(cols[i].dataLength)
           .clamp(cols[i].min, cols[i].max)
           .min(Fixed(20));
-      ret[i] = width;
+      ret[i] = width.min(Fixed(remWidth));
       remWidth -= width.size;
       ok[i] = true;
     } else {
@@ -85,7 +85,7 @@ List<Fixed> estimateColumnSizeWithTotalWidth(
     }
   }
 
-  // Flex sizes that is below allocated width
+  // Flex columns with minWidth that exceeds allocated width
   {
     final int flexTotalWidth = remWidth;
     int flexUsed = 0;
@@ -96,8 +96,8 @@ List<Fixed> estimateColumnSizeWithTotalWidth(
         final int allocWidth = (flexTotalWidth * size.flex) ~/ flexTotal;
         final width = Fixed(allocWidth)
             .clamp(cols[i].min, cols[i].max, totalSize: totalWidth);
-        if (width.size <= allocWidth) {
-          ret[i] = width;
+        if (width.size > allocWidth) {
+          ret[i] = width.min(Fixed(remWidth));
           remWidth -= width.size;
           ok[i] = true;
           flexUsed += size.flex;
@@ -107,22 +107,30 @@ List<Fixed> estimateColumnSizeWithTotalWidth(
     flexTotal -= flexUsed;
   }
 
-  // Flex sizes that is above allocated width
+  // Remaining Flex columns
   {
     final int flexTotalWidth = remWidth;
+    int flexUsed = 0;
 
     for (int i = 0; i < cols.length; i++) {
       Size? size = cols[i].width;
       if (size is Flex && !ok[i]) {
         final int allocWidth = (flexTotalWidth * size.flex) ~/ flexTotal;
-        final width = Fixed(allocWidth);
-        ret[i] = width;
+        final width = Fixed(allocWidth)
+            .clamp(cols[i].min, cols[i].max, totalSize: totalWidth);
+        ret[i] = width.min(Fixed(remWidth));
         remWidth -= width.size;
         ok[i] = true;
+        flexUsed += size.flex;
       }
     }
-    flexTotal = 0;
+    flexTotal -= flexUsed;
   }
+
+  // Make sure all flex columns are estimated
+  assert(flexTotal == 0);
+
+  // TODO try to distribute extra width to 0 length columns
 
   // Try to distribute extra width to columns which have long length
   for (int i = 0; i < cols.length && remWidth > 0; i++) {

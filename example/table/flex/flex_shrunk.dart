@@ -6,7 +6,7 @@ main() {
     ['Christiano Ronaldo', 'Real Madrid', 30],
     ['Luiz Suarez', 'Barcelona FC', 50]
   ], columns: [
-    ColSpec(name: 'Player', width: Fixed(114)),
+    ColSpec(name: 'Player', width: Fixed(104)),
     ColSpec(name: 'Team', width: Flex(1)),
     ColSpec(name: 'Goals', width: Flex(1), align: Align.right)
   ], width: 120);
