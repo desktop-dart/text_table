@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:characters/characters.dart';
@@ -9,20 +8,13 @@ import '../style/style.dart';
 class TableDrawer {
   static String drawRowSeparator(List<int> colWidths, int totalWidth,
       LineStyle style, List<Padding> padding) {
-    final str = List<String>.filled(totalWidth, style.horizontal);
-    str[0] = style.left;
-    str[str.length - 1] = style.right;
-
-    if (colWidths.length > 1) {
-      int pos = 0;
-      for (int i = 0; i < colWidths.length - 1; i++) {
-        pos += colWidths[i] + 1;
-        pos += padding[i].total;
-        str[pos] = style.intersection;
-      }
-    }
-
-    return str.join();
+    final sb = StringBuffer();
+    sb.write(style.left);
+    sb.write(colWidths
+        .mapIndexed((i, w) => padding[i].pad(style.horizontal * w))
+        .join(style.intersection));
+    sb.write(style.right);
+    return sb.toString();
   }
 
   static String drawDataLine(List cells, LineStyle style) {
