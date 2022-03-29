@@ -29,49 +29,10 @@ class TableDrawer {
     return style.left + cells.join(style.intersection) + style.right;
   }
 
-  /*static String drawCell(int width, value, Align align, String ellipsis) {
-    final v = value?.toString() ?? '';
-    if (v.length == width) {
-      return v;
-    } else if (v.length > width) {
-      if (ellipsis.length >= width) {
-        return ellipsis.substring(0, width);
-      } else {
-        return v.substring(0, width - ellipsis.length) + ellipsis;
-      }
-    }
-
-    switch (align) {
-      case Align.left:
-        return v + (' ' * (width - v.length));
-      case Align.center:
-        final int spaces = width - v.length;
-        return (' ' * (spaces ~/ 2)) +
-            v +
-            (' ' * (spaces ~/ 2)) +
-            (spaces.isOdd ? ' ' : '');
-      case Align.right:
-        return (' ' * (width - v.length)) + v;
-      default:
-        throw UnsupportedError('Unsupported alignment!');
-    }
-  }
-
-  static String singleLineRow(List cells, List<int> widths, List<Align> aligns,
-      String ellipsis, LineStyle style, List<Padding> pads) {
-    final renderedCells = <String>[];
-    for (int i = 0; i < cells.length; i++) {
-      renderedCells.add(pads[i]
-          .pad(TableDrawer.drawCell(widths[i], cells[i], aligns[i], ellipsis)));
-    }
-
-    return TableDrawer.drawDataLine(renderedCells, style);
-  }*/
-
   static List<String> drawRow(List cells, List<int> widths, List<Align> aligns,
       String ellipsis, LineStyle style, List<Padding> pads) {
     final ret = <String>[];
-    final raw = makeCells(cells, widths, aligns, pads);
+    final raw = makeCells(cells, widths, aligns, pads, style);
     for (int i = 0; i < raw.first.length; i++) {
       ret.add(drawDataLine(raw.map((e) => e[i]).toList(), style));
     }
@@ -85,8 +46,8 @@ class TableDrawer {
     return _window(Characters(data), width, align);
   }
 
-  static List<List<String>> makeCells(
-      List cells, List<int> widths, List<Align> aligns, List<Padding> padding) {
+  static List<List<String>> makeCells(List cells, List<int> widths,
+      List<Align> aligns, List<Padding> padding, LineStyle style) {
     final lines = cells
         .mapIndexed((i, e) =>
             toMultilineOneCell(e?.toString() ?? '', widths[i], aligns[i]))
@@ -94,8 +55,8 @@ class TableDrawer {
     final maxLines =
         lines.fold(0, (int p, element) => max<int>(p, element.length));
     for (final line in lines) {
-      line.addAll(Iterable.generate(
-          maxLines - line.length, (_) => ' ' * line.first.length));
+      line.addAll(Iterable.generate(maxLines - line.length,
+          (_) => style.horizontal * line.first.length));
     }
     lines.forEachIndexed((i, lines) =>
         lines.forEachIndexed((j, line) => lines[j] = padding[i].pad(line)));
