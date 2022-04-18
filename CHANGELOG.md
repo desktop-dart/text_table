@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.0.1
+
++ Fixed padding bug
+
+## 4.0.0
+
+**Complete Rewrite!**
++ `TableRenderer.render` renders the table
++ Introduced `ColSpec` class to control column properties like width, minimum
+width, maximum width, alignment, padding, etc.
+
 ## 3.0.0
 
 + Null safety

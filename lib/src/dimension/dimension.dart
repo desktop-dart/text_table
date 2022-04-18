@@ -98,5 +98,6 @@ class Padding {
       : before = padding,
         after = padding;
 
-  String pad(String content) => (' ' * before) + content + (' ' * after);
+  String pad(String content, {String pad = ' '}) =>
+      (pad * before) + content + (pad * after);
 }

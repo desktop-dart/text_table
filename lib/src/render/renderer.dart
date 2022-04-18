@@ -90,9 +90,9 @@ class TableRenderer {
             pad: e.padding ?? padding))
         .toList();
 
+    // Estimate column sizes
     List<Fixed> estimated;
     int totalWidth;
-
     if (width == null) {
       estimated = estimateColumnSizes(colSpecs);
       totalWidth = Fixed.sum(estimated) + decorWidth;

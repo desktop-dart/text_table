@@ -10,9 +10,9 @@ class TableDrawer {
       LineStyle style, List<Padding> padding) {
     final sb = StringBuffer();
     sb.write(style.left);
-    sb.write(colWidths
-        .mapIndexed((i, w) => padding[i].pad(style.horizontal * w))
-        .join(style.intersection));
+    sb.write(colWidths.mapIndexed((i, w) {
+      return padding[i].pad(style.horizontal * w, pad: style.horizontal);
+    }).join(style.intersection));
     sb.write(style.right);
     return sb.toString();
   }
@@ -21,12 +21,12 @@ class TableDrawer {
     return style.left + cells.join(style.intersection) + style.right;
   }
 
-  static List<String> drawRow(List cells, List<int> widths, List<Align> aligns,
+  static List<String> drawRow(List data, List<int> widths, List<Align> aligns,
       LineStyle style, List<Padding> pads) {
     final ret = <String>[];
-    final raw = makeCells(cells, widths, aligns, pads, style);
-    for (int i = 0; i < raw.first.length; i++) {
-      ret.add(drawDataLine(raw.map((e) => e[i]).toList(), style));
+    final cells = makeCells(data, widths, aligns, pads, style);
+    for (int i = 0; i < cells.first.length; i++) {
+      ret.add(drawDataLine(cells.map((e) => e[i]).toList(), style));
     }
     return ret;
   }
