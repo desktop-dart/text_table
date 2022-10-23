@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.2
+
++ Updated some package versions
+
 ## 4.0.1
 
 + Fixed padding bug
