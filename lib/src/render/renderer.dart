@@ -129,7 +129,10 @@ class TableRenderer {
           widths, totalWidth, border.topLine, paddings));
     }
 
+    final rowLength = rows.length;
+
     // Render row and its separator
+    int rowNum = 1;
     for (List cells in rows) {
       if (cells.length != columns.length) {
         throw Exception('Invalid number of columns in a row');
@@ -137,7 +140,7 @@ class TableRenderer {
       TableDrawer.drawRow(cells, widths, aligns, border.contentLine, paddings)
           .forEach(sb.writeln);
 
-      if (cells != rows.last) {
+      if (rowNum != rowLength) {
         final LineStyle sepStyle = border.separatorLine;
         if (sepStyle.left.isNotEmpty ||
             sepStyle.horizontal.isNotEmpty ||
@@ -147,6 +150,7 @@ class TableRenderer {
               widths, totalWidth, border.separatorLine, paddings));
         }
       }
+      rowNum++;
     }
 
     // Render bottom separator

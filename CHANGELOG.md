@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.3
+
++ Render last line bug fix
+
 ## 4.0.2
 
 + Updated some package versions
